@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 3000;
 app.get("/", (req, res) => {
   res.json({
     status: "ok",
-    message: "8byte DevOps assignment app is running"
+    message: "8byte DevOps assignment app is running ,  CI/CD version 1"
   });
 });
 
