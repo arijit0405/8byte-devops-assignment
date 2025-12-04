@@ -1,0 +1,20 @@
+{
+  "name": "byte8-devops-app",
+  "version": "1.0.0",
+  "description": "Sample app for 8byte DevOps assignment",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "jest --runInBand"
+  },
+  "keywords": [],
+  "author": "Arijit Chakraborty",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "jest": "^30.2.0",
+    "supertest": "^7.1.4"
+  }
+}
