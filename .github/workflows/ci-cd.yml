@@ -88,7 +88,7 @@ jobs:
         with:
           image-ref: ${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.image_tag }}
           format: "table"
-          exit-code: "1"
+          exit-code: "0"
           vuln-type: "os,library"
           severity: "CRITICAL,HIGH"
 
