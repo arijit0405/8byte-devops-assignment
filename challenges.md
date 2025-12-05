@@ -1,38 +1,83 @@
 Technical Challenges I Faced & How I Solved Them
-This document lists the real issues I encountered during the 8byte DevOps assignment and how each was resolved — explained in a clear, human-friendly way.
+
+This document lists the real issues I faced while completing the 8byte DevOps assignment and how I fixed each one. The explanations are simple, clear, and written in a human-friendly way.
+
 Terraform: RDS Identifier Error
-Challenge: Terraform threw an error because the RDS identifier must start with a letter, but my project name started with a number.
-Fix: Updated the identifier format to always begin with a letter (e.g., prefixed with app- or similar). After the change, the RDS instance was created successfully.
+
+Challenge:
+Terraform showed an error saying the RDS identifier must start with a letter. My project name began with a number, so AWS didn’t accept it.
+
+Fix:
+I updated the identifier format so that it always starts with a letter. After making this change, the RDS instance was created successfully.
+
 Terraform: Unsupported PostgreSQL Version
-Challenge: Terraform failed to create the RDS instance because the chosen PostgreSQL version wasn’t available in my selected AWS region.
-Fix: Switched to a widely supported major version (e.g., 15.x or 16.x) that exists in all regions. Apply succeeded immediately afterward.
-GitHub Actions: Secrets Not Recognized in if-condition
-Challenge: Workflow failed with “unrecognized secrets context” when using secrets directly inside an if: statement.
-Fix: Rewrote the condition using the correct ${{ secrets.MY_SECRET }} syntax inside env or proper expression format. Slack notifications started working again.
+
+Challenge:
+Terraform failed to create the RDS instance because the PostgreSQL version I used wasn’t available in my AWS region.
+
+Fix:
+I switched to a stable major version that AWS supports everywhere. After updating the version, Terraform applied without issues.
+
+GitHub Actions: Secrets Not Recognized
+
+Challenge:
+GitHub Actions gave an error saying it couldn’t recognize the secrets context when used directly inside an if-condition.
+
+Fix:
+I rewrote the condition using the proper GitHub expression format. This fixed the workflow and allowed Slack notifications to work correctly.
+
 GitHub Actions: Dockerfile Not Found
-Challenge: Docker build step couldn’t find the Dockerfile because it was inside the application/ directory, but the job was looking in the repository root.
-Fix: Set working-directory: application for the build steps (or used proper path in docker/build-push-action). Build succeeded on the next run.
-Trivy Scan Detecting High/Critical Vulnerabilities
-Challenge: CI pipeline was blocked because Trivy found high-severity vulnerabilities in Node.js dependencies.
-Fix: Updated vulnerable packages to latest secure versions, deleted node_modules and package-lock.json, then ran a clean npm install. Scan passed with zero high/critical issues.
+
+Challenge:
+The Docker build step kept failing because GitHub Actions was searching for the Dockerfile in the root folder, while mine was inside the application directory.
+
+Fix:
+I changed the working directory of the build steps so GitHub Actions points to the correct folder. After that, the Docker build worked properly.
+
+Trivy Scan Detecting High Vulnerabilities
+
+Challenge:
+The Trivy scan stopped the CI pipeline because it found high-severity vulnerabilities in some Node.js dependencies.
+
+Fix:
+I updated the affected packages and reinstalled everything with a clean dependency setup. After the update, the security scan passed with no high or critical issues.
+
 Git Push Rejected (Non-Fast-Forward)
-Challenge: git push was rejected because my branch was behind main and histories diverged.
-Fix: Ran git fetch && git rebase origin/main, resolved any conflicts, then force-pushed with git push --force-with-lease. Push succeeded and history stayed clean.
-EC2 Deployment Failed Due to Old Container Running
-Challenge: New container wouldn’t start because an older version was still running and occupying the same port/name.
-Fix: Added commands to the deployment script to docker stop and docker rm the old container (or used docker run --rm) before starting the new one. Deployments became reliable.
+
+Challenge:
+My push was rejected because my branch was behind the main branch and the histories didn’t match.
+
+Fix:
+I rebased my branch with the latest changes from main and then pushed again. This resolved the conflict and cleaned up the commit history.
+
+EC2 Deployment Failed Due to Old Container
+
+Challenge:
+The deployment kept failing because an older version of the container was still running on the EC2 instance.
+
+Fix:
+I added logic to stop and remove the old container before starting a new one. This ensured deployments always run the updated version.
+
 Monitoring Stack: Docker Desktop Not Running
-Challenge: Local monitoring stack (Prometheus/Loki/Grafana) failed to start because Docker Desktop wasn’t running.
-Fix: Started Docker Desktop, waited for the engine to be fully ready, then re-ran docker compose up. All services came online without issues.
-Promtail Logs Not Appearing in Grafana
-Challenge: No logs were visible in Grafana’s Explore view even though Promtail was running.
-Fix: Confirmed Loki was added as a data source, checked Promtail config and logs to verify it was scraping the correct paths, then restarted both services. Logs started flowing correctly.
-Testing the Application Through the ALB
-Challenge: Wasn’t sure if the application was properly reachable behind the AWS Application Load Balancer.
-Fix: Tested the ALB DNS name with:
 
-Main endpoint (/)
-Health check endpoint (/health)
-Metrics endpoint (/metrics)
+Challenge:
+The monitoring stack failed to start locally because Docker Desktop wasn’t running.
 
-All returned expected 200 responses with correct content → deployment confirmed successful.
+Fix:
+I opened Docker Desktop, waited for it to fully start, and then relaunched the stack. All services came up properly afterward.
+
+Promtail Logs Not Showing in Grafana
+
+Challenge:
+Grafana’s Explore view didn’t show any logs coming from Promtail.
+
+Fix:
+I added Loki as a data source in Grafana, checked Promtail’s logs, and confirmed that it was reading from the expected log files. After rechecking everything, logs started appearing correctly.
+
+Testing Through the ALB
+
+Challenge:
+I wasn’t sure whether the application was correctly deployed behind the AWS Application Load Balancer.
+
+Fix:
+I tested the ALB DNS by checking the main endpoint, the health endpoint, and the metrics endpoint. All responses came back correctly, confirming the deployment was successful.
