@@ -10,35 +10,6 @@ Setting up CI/CD with GitHub Actions (run tests, scan code, build & push Docker 
 
 Adding a small monitoring + logging setup using Prometheus, Grafana, Loki, and Promtail.
 
-.
-├── app/                     
-│   ├── src/
-│   ├── tests/
-│   ├── package.json
-│   ├── package-lock.json
-│   └── Dockerfile            # Node.js application
-│
-├── infra/                   
-│   ├── main.tf
-│   ├── vpc.tf
-│   ├── alb.tf
-│   ├── ec2.tf
-│   ├── rds.tf
-│   ├── variables.tf
-│   └── outputs.tf            # Terraform code for AWS resources
-│
-├── monitoring/              
-│   ├── docker-compose.yml
-│   ├── prometheus.yml
-│   └── promtail-config.yml   # Local monitoring & logging stack
-│
-├── .github/
-│   └── workflows/
-│       └── ci-cd.yml         # GitHub Actions CI/CD pipeline
-│
-├── README.md                 # Main documentation
-└── CHALLENGES.md             # Issues I faced + fixes
-
 
 
 
