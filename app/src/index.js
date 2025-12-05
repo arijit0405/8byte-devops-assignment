@@ -1,3 +1,8 @@
+const client = require("prom-client");
+
+// Enabling default metrics
+client.collectDefaultMetrics();
+
 const express = require("express");
 
 const app = express();
@@ -13,6 +18,12 @@ app.get("/", (req, res) => {
 app.get("/health", (req, res) => {
   res.send("OK");
 });
+
+app.get("/metrics", async (req, res) => {     //added this new metric endpont
+  res.set("Content-Type", client.register.contentType); 
+  res.end(await client.register.metrics());
+});
+
 
 if (require.main === module) {
   app.listen(PORT, () => {
