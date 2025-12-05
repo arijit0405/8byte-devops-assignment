@@ -1,0 +1,8 @@
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: "node_app"
+    metrics_path: "/metrics"
+    static_configs:
+      - targets: ["byte8-devops-assignment-alb-880800484.ap-south-1.elb.amazonaws.com"]
